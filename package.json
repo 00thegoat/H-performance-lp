@@ -1,14 +1,18 @@
 {
-  "name": "lavorovitta",
+  "name": "h-performance",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "patch": "node scripts/patch-content.mjs && node scripts/split-snapshot.mjs",
+    "split": "node scripts/split-snapshot.mjs"
   },
   "dependencies": {
+    "html-react-parser": "^6.0.1",
+    "motion": "^12.38.0",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -20,6 +24,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "playwright": "^1.59.1",
+    "single-file-cli": "^2.0.83",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# H Performance — Next.js
 
-## Getting Started
+Site institucional da H Performance, servido como **componentes React** via Next.js + `html-react-parser` em cima de um snapshot HTML/CSS.
 
-First, run the development server:
+## Como rodar
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# abre http://localhost:3000/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A home (`/`) renderiza um único componente `SiteBody` que parseia o snapshot completo em árvore React.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/app/page.tsx
+└── <SiteBody />        ← parseia src/snapshot/body.ts
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Como editar textos
 
-## Learn More
+1. Edite `content.json` na raiz (cada chave é um texto da página).
+2. Rode:
+   ```bash
+   npm run patch
+   ```
+   Isso aplica o conteúdo ao snapshot E regenera os módulos.
+3. Recarregue `localhost:3000`.
 
-To learn more about Next.js, take a look at the following resources:
+## Como trocar imagens
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Imagens estão em `public/images/`. Mapeamento:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Arquivo | Onde aparece |
+|---|---|
+| `Logo_white.png` | Logo H no header |
+| `img-2-4eb28f8ec7.png` + `img-4-31406c551a.avif` | Hero (Nova York) |
+| `img-5-11ccbc5aea.png` + `img-6-cc8ebe5e73.avif` | Middle CTA (Toronto) |
+| `img-7-d30a20f305.png` + `img-8-48b94a81b0.avif` | Solutions (Manhattan Bridge) |
+| `instagram.svg` / `facebook.svg` / `linkedin.svg` | Ícones do footer |
 
-## Deploy on Vercel
+Pra trocar: sobrescreva o arquivo com o mesmo nome (ou edite `public/replica.html` e `src/snapshot/body.ts` se for trocar o caminho).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Estrutura
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+h-performance/
+├── content.json                ← edite aqui (textos)
+├── public/
+│   ├── replica.html            ← snapshot patchado (gerado)
+│   └── images/                 ← imagens (sobrescreva)
+├── replica.template.html       ← template com {{placeholders}}
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── globals.css         ← overrides de marca H (cores/hover/header)
+│   ├── components/
+│   │   ├── SiteAnimations.tsx  ← entrance + scroll reveal (Motion)
+│   │   └── sections/SiteBody.tsx
+│   └── snapshot/               ← gerado por split-snapshot.mjs
+│       ├── styles.css
+│       └── body.ts
+└── scripts/
+    ├── apply-brand.mjs         ← aplica paleta/fontes/textos H (1x)
+    ├── patch-content.mjs       ← gera public/replica.html
+    ├── split-snapshot.mjs      ← gera src/snapshot/*
+    ├── swap-logo.mjs           ← injeta Logo_white.png
+    └── swap-videos.mjs         ← troca <video> por <img>
+```
