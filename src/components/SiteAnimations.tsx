@@ -14,9 +14,9 @@ export default function SiteAnimations() {
   useEffect(() => {
     // Page entrance: fade body in from a slight Y offset
     animate(
-      "body",
+      document.body,
       { opacity: [0, 1], y: [8, 0] },
-      { duration: 0.9, easing: [0.2, 0.65, 0.2, 1] }
+      { duration: 0.9, ease: [0.2, 0.65, 0.2, 1] }
     );
 
     // Mark major top-level sections of the Wix snapshot for scroll reveal
