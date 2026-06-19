@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import "@/snapshot/styles.css";
+import "./globals.css";
+import "./mobile-overrides.css";
 import SiteAnimations from "@/components/SiteAnimations";
 
 export const metadata: Metadata = {
